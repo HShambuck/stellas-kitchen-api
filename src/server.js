@@ -7,6 +7,7 @@ import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import menuRoutes from './routes/menuRoutes.js';
+import riderRoutes from './routes/riderRoutes.js';
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ dotenv.config();
 connectDB();
 
 const app = express();
+const PORT = process.env.PORT || 5000;
 
 // Global Middlewares
 app.use(cors());
@@ -23,7 +25,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/menu', menuRoutes);
-
+app.use('/api/riders', riderRoutes);
 
 // Root Endpoint
 app.get('/', (req, res) => {
@@ -31,10 +33,7 @@ app.get('/', (req, res) => {
 });
 
 
-// Placeholder for routes - Will mount actual route modules here next
-app.use('/api/riders', (req, res) => res.send('Rider routes coming up next...'));
 
-const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server executing watch mode on port ${PORT}`);
 });
