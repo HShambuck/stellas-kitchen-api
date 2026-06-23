@@ -1,0 +1,224 @@
+### =========================================================================
+### STELLA'S KITCHEN API TESTING SUITE
+### =========================================================================
+@baseUrl = http://localhost:5000/api
+
+### INSTRUCTIONS:
+### 1. Execute public routes (Menu / Web Orders / Registration) directly.
+### 2. After logging in, copy the returned token value.
+### 3. Replace the token values in the variables below to test protected routes.
+
+@staffToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhM2IxYmI3OTdkYTE3YTU2YWYyODY3NiIsImlhdCI6MTc4MjI1ODYxNSwiZXhwIjoxNzg0ODUwNjE1fQ.bfmbUvj5FBme0DbCqGRDcm8bHV5myVy2GlhnDDy8Hwo
+@riderToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhM2IxYmVjOTdkYTE3YTU2YWYyODY3NyIsImlhdCI6MTc4MjI1ODY2OCwiZXhwIjoxNzg0ODUwNjY4fQ.U06qtnfM-n94iCygKG1XwPFaJCGi11aSjNfaYZge2yw
+
+### =========================================================================
+### 1. DIAGNOSTIC ROOT ENDPOINT
+### =========================================================================
+
+GET http://localhost:5000/
+Accept: application/json
+
+---
+
+### =========================================================================
+### 2. AUTHENTICATION ENDPOINTS (/api/auth)
+### =========================================================================
+
+### @name RegisterStaff
+POST {{baseUrl}}/auth/staff/register
+Content-Type: application/json
+
+{
+  "name": "Kwame Mensah",
+  "email": "kwame@stellaskitchen.com",
+  "password": "StaffSecurePass123",
+  "role": "Staff"
+}
+
+###
+
+### @name LoginStaff
+POST {{baseUrl}}/auth/staff/login
+Content-Type: application/json
+
+{
+  "email": "kwame@stellaskitchen.com",
+  "password": "StaffSecurePass123"
+}
+
+###
+
+### @name RegisterRider
+POST {{baseUrl}}/auth/rider/register
+Content-Type: application/json
+
+{
+  "name": "Kofi Boateng",
+  "phoneNumber": "+233241234567",
+  "password": "RiderSecurePass123",
+  "vehicleRegistration": "M-26-AS-987"
+}
+
+###
+
+### @name LoginRider
+POST {{baseUrl}}/auth/rider/login
+Content-Type: application/json
+
+{
+  "phoneNumber": "+233241234567",
+  "password": "RiderSecurePass123"
+}
+
+---
+
+### =========================================================================
+### 3. MENU ENDPOINTS (/api/menu)
+### =========================================================================
+
+### @name FetchMenu
+GET {{baseUrl}}/menu
+Accept: application/json
+
+---
+
+### =========================================================================
+### 4. MULTI-CHANNEL ORDER INGESTION (/api/orders)
+### =========================================================================
+
+### @name PlaceTablesideQROrder (Public)
+POST {{baseUrl}}/orders/web/qr
+Content-Type: application/json
+
+{
+  "phoneNumber": "+233509876543",
+  "tableNumber": "Table 4",
+  "items": [
+    {
+      "foodItemName": "Jollof Rice with Grilled Chicken",
+      "quantity": 2,
+      "price": 65.00
+    },
+    {
+      "foodItemName": "Sobolo Drink",
+      "quantity": 2,
+      "price": 15.00
+    }
+  ],
+  "totalAmount": 160.00
+}
+
+###
+
+### @name PlaceSocialMediaLinkOrder (Public)
+POST {{baseUrl}}/orders/web/link
+Content-Type: application/json
+
+{
+  "customerName": "Abena Osei",
+  "phoneNumber": "+233271112223",
+  "deliveryAddress": "Shai Hills, Manya Community, Block C",
+  "items": [
+    {
+      "foodItemName": "Banku with Tilapia",
+      "quantity": 1,
+      "price": 80.00
+    }
+  ],
+  "totalAmount": 80.00
+}
+
+###
+
+### @name CreateManualStaffOrder (Protected - Requires Staff Token)
+POST {{baseUrl}}/orders/manual
+Content-Type: application/json
+Authorization: Bearer {{staffToken}}
+
+{
+  "customerName": "Emmanuel Tetteh",
+  "phoneNumber": "+233203334445",
+  "deliveryAddress": "Walk-in / Phone Order",
+  "items": [
+    {
+      "foodItemName": "Fried Rice with Fish",
+      "quantity": 1,
+      "price": 55.00
+    }
+  ],
+  "totalAmount": 55.00
+}
+
+---
+
+### =========================================================================
+### 5. KITCHEN OPERATIONS & RIDER DISPATCH (Protected - Requires Staff Token)
+### =========================================================================
+
+### @name ViewCentralKitchenDashboard
+GET {{baseUrl}}/orders
+Authorization: Bearer {{staffToken}}
+
+###
+
+### @name FetchAvailableRiders
+GET {{baseUrl}}/riders/available
+Authorization: Bearer {{staffToken}}
+
+###
+
+### @name AssignRiderToOrder
+### INSTRUCTIONS: Replace the ID in the URL with a real Order _id from MongoDB 
+### and the riderId in the body with a real Rider _id.
+PATCH {{baseUrl}}/orders/REPLACE_WITH_REAL_ORDER_ID/assign
+Content-Type: application/json
+Authorization: Bearer {{staffToken}}
+
+{
+  "riderId": "REPLACE_WITH_REAL_RIDER_ID"
+}
+
+###
+
+### @name AdvanceOrderStatus (Kitchen Staff Workflow)
+### INSTRUCTIONS: Replace the ID in the URL with a real Order _id from MongoDB.
+PATCH {{baseUrl}}/orders/REPLACE_WITH_REAL_ORDER_ID/status
+Content-Type: application/json
+Authorization: Bearer {{staffToken}}
+
+{
+  "statusState": "Preparing"
+}
+
+---
+
+### =========================================================================
+### 6. RIDER SHIFT LOGISTICS (Protected - Requires Rider Token)
+### =========================================================================
+
+### @name ToggleRiderShiftToActive
+PATCH {{baseUrl}}/riders/status
+Content-Type: application/json
+Authorization: Bearer {{riderToken}}
+
+{
+  "scheduleStatus": "Active/Idle"
+}
+
+###
+
+### @name FetchMyAssignedDeliveries
+GET {{baseUrl}}/riders/my-deliveries
+Authorization: Bearer {{riderToken}}
+
+###
+
+### @name MarkOrderAsDelivered (Rider Workflow)
+### INSTRUCTIONS: Replace the ID in the URL with a real Order _id from MongoDB.
+PATCH {{baseUrl}}/orders/REPLACE_WITH_REAL_ORDER_ID/status
+Content-Type: application/json
+Authorization: Bearer {{riderToken}}
+
+{
+  "statusState": "Delivered"
+}

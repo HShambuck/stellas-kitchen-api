@@ -14,15 +14,12 @@ const riderSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-riderSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
-  try {
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
-  } catch (error) {
-    next(error);
-  }
+// Pre-save middleware to automatically hash passwords before saving (Modern Async style)
+riderSchema.pre('save', async function () {
+  if (!this.isModified('password')) return;
+  
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
 });
 
 riderSchema.methods.matchPassword = async function (enteredPassword) {
