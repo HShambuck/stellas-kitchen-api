@@ -1,7 +1,7 @@
 {
   "name": "stellas-kitchen-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "A modular, multi-channel REST API built with Node.js, Express, and MongoDB Atlas. Engineered to synchronize real-time digital orders from web-based QR codes and shareable links with a staff-facing React Native Android application for Stella's Kitchen, featuring role-based JWT authentication and encrypted user data parsing.",
   "main": "server.js",
   "scripts": {
     "dev": "node --watch src/server.js",
