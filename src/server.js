@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
+import authRoutes from './routes/authRoutes.js';
 
 dotenv.config();
 
@@ -14,13 +15,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
 // Root Endpoint
 app.get('/', (req, res) => {
   res.send("Stella's Kitchen API is spinning...");
 });
 
-// Placeholder for routes - We will mount actual route modules here next
-app.use('/api/auth', (req, res) => res.send('Auth routes coming up next...'));
+
+// Placeholder for routes - Will mount actual route modules here next
+app.use('/api/auth', authRoutes);
 app.use('/api/orders', (req, res) => res.send('Order routes coming up next...'));
 app.use('/api/riders', (req, res) => res.send('Rider routes coming up next...'));
 
