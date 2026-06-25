@@ -30,7 +30,7 @@ const orderSchema = new mongoose.Schema({
   statusState: { 
     type: String, 
     required: true, 
-    enum: ['Pending', 'Preparing', 'Ready for Dispatch', 'Delivered'], 
+    enum: ['Pending', 'Preparing', 'Ready for Dispatch', 'Out for Delivery', 'Delivered'], 
     default: 'Pending' 
   },
   assignedRider: { 
