@@ -10,7 +10,7 @@ const riderSchema = new mongoose.Schema({
   scheduleStatus: { 
     type: String, 
     required: true, 
-    enum: ['Offline', 'Active/Idle', 'On Delivery Run'], 
+    enum: ['Offline', 'Available', 'On Delivery Run'], // 💡 Refactored 'Active/Idle' to 'Available'
     default: 'Offline' 
   }
 }, { timestamps: true });
