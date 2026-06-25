@@ -52,17 +52,30 @@ export const loginStaff = async (req, res) => {
 
 // @desc    Register a new Rider account
 // @route   POST /api/auth/rider/register
+// Inside your controller file, apply .trim() uniformly across methods:
+
+// Inside your controller file, apply .trim() uniformly across methods:
+
 export const registerRider = async (req, res) => {
   const { name, phoneNumber, password, vehicleRegistration } = req.body;
   try {
-    const riderExists = await Rider.findOne({ phoneNumber });
-    if (riderExists) return res.status(400).json({ message: 'Rider already registered with this phone number' });
+    const cleanPhone = phoneNumber.trim(); // 💡 Standardized string lookup
+    const riderExists = await Rider.findOne({ phoneNumber: cleanPhone });
+    if (riderExists) return res.status(400).json({ message: 'Rider already registered' });
 
-    const rider = await Rider.create({ name, phoneNumber, password, vehicleRegistration });
+    const rider = await Rider.create({ 
+      name, 
+      phoneNumber: cleanPhone, 
+      password, 
+      role: 'Rider', // Saved clearly
+      vehicleRegistration 
+    });
+    
     res.status(201).json({
       _id: rider._id,
       name: rider.name,
       phoneNumber: rider.phoneNumber,
+      role: rider.role,
       vehicleRegistration: rider.vehicleRegistration,
       scheduleStatus: rider.scheduleStatus,
       token: generateToken(rider._id),
@@ -72,18 +85,18 @@ export const registerRider = async (req, res) => {
   }
 };
 
-// @desc    Auth Rider & get token
-// @route   POST /api/auth/rider/login
 export const loginRider = async (req, res) => {
   const { phoneNumber, password } = req.body;
   try {
-    const rider = await Rider.findOne({ phoneNumber });
+    const cleanPhone = phoneNumber.trim(); // 💡 Standardized string lookup
+    const rider = await Rider.findOne({ phoneNumber: cleanPhone });
+    
     if (rider && (await rider.matchPassword(password))) {
       res.json({
         _id: rider._id,
         name: rider.name,
         phoneNumber: rider.phoneNumber,
-        role: rider.role || "Rider",
+        role: rider.role, // Reads directly from DB now
         vehicleRegistration: rider.vehicleRegistration,
         scheduleStatus: rider.scheduleStatus,
         token: generateToken(rider._id),

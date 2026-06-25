@@ -5,6 +5,7 @@ const riderSchema = new mongoose.Schema({
   name: { type: String, required: true },
   phoneNumber: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  role: { type: String, default: 'Rider' },
   vehicleRegistration: { type: String, required: false }, // e.g., Motorbike plate number
   scheduleStatus: { 
     type: String, 
