@@ -8,7 +8,7 @@
 ### 2. After logging in, copy the returned token value.
 ### 3. Replace the token values in the variables below to test protected routes.
 
-@staffToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhM2IxYmI3OTdkYTE3YTU2YWYyODY3NiIsImlhdCI6MTc4MjI1ODYxNSwiZXhwIjoxNzg0ODUwNjE1fQ.bfmbUvj5FBme0DbCqGRDcm8bHV5myVy2GlhnDDy8Hwo
+@staffToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhM2IxYmI3OTdkYTE3YTU2YWYyODY3NiIsImlhdCI6MTc4MjI3NTcwOSwiZXhwIjoxNzg0ODY3NzA5fQ.bG93rpaSFS5lfV-sSBdP2C_eZ3zbrhFhl1--r_m5aC4
 @riderToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhM2IxYmVjOTdkYTE3YTU2YWYyODY3NyIsImlhdCI6MTc4MjI1ODY2OCwiZXhwIjoxNzg0ODUwNjY4fQ.U06qtnfM-n94iCygKG1XwPFaJCGi11aSjNfaYZge2yw
 
 ### =========================================================================
@@ -62,14 +62,13 @@ Content-Type: application/json
 ###
 
 ### @name LoginRider
-POST {{baseUrl}}/auth/rider/login
+POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
   "phoneNumber": "+233241234567",
   "password": "RiderSecurePass123"
 }
-
 ---
 
 ### =========================================================================
