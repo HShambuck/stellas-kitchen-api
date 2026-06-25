@@ -83,6 +83,7 @@ export const loginRider = async (req, res) => {
         _id: rider._id,
         name: rider.name,
         phoneNumber: rider.phoneNumber,
+        role: rider.role || "Rider",
         vehicleRegistration: rider.vehicleRegistration,
         scheduleStatus: rider.scheduleStatus,
         token: generateToken(rider._id),
