@@ -5,7 +5,7 @@ const riderSchema = new mongoose.Schema({
   name: { type: String, required: true },
   phoneNumber: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  vehicleRegistration: { type: String, required: true }, // e.g., Motorbike plate number
+  vehicleRegistration: { type: String, required: false }, // e.g., Motorbike plate number
   scheduleStatus: { 
     type: String, 
     required: true, 
