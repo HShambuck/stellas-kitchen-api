@@ -4,8 +4,9 @@ import {
   createWebQROrder, 
   createWebLinkOrder, 
   createManualOrder, 
-  updateOrderStatus, 
-  assignRiderToOrder 
+  updateOrderStatus,
+  getAvailableDeliveries,
+  acceptDelivery
 } from '../controllers/orderController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -19,6 +20,9 @@ router.post('/web/link', createWebLinkOrder);
 router.get('/', protect, getOrders);
 router.post('/manual', protect, createManualOrder);
 router.patch('/:id/status', protect, updateOrderStatus);
-router.patch('/:id/assign', protect, assignRiderToOrder);
+
+// ─── Rider Pull Pool Routes ──────────────────────────────────────────────
+router.get('/available-deliveries', protect, getAvailableDeliveries);
+router.post('/:id/accept', protect, acceptDelivery);
 
 export default router;
