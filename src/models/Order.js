@@ -11,7 +11,7 @@ const orderSchema = new mongoose.Schema({
     type: String, 
     required: function() { return this.channelSource !== 'QR'; } 
   },
-  phoneNumber: { type: String, required: true },
+  phoneNumber: { type: String, default: "" },
   deliveryAddress: { 
     type: String, 
     required: function() { return this.channelSource === 'Link'; } 
