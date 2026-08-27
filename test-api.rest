@@ -1,21 +1,21 @@
 ### =========================================================================
 ### STELLA'S KITCHEN API TESTING SUITE
 ### =========================================================================
-@baseUrl = http://localhost:5000/api
+@baseUrl = https://ohh2sn3qr6.execute-api.eu-west-2.amazonaws.com/api
 
 ### INSTRUCTIONS:
 ### 1. Execute public routes (Menu / Web Orders / Registration) directly.
 ### 2. After logging in, copy the returned token value.
 ### 3. Replace the token values in the variables below to test protected routes.
 
-@staffToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhM2IxYmI3OTdkYTE3YTU2YWYyODY3NiIsImlhdCI6MTc4MjI3NTcwOSwiZXhwIjoxNzg0ODY3NzA5fQ.bG93rpaSFS5lfV-sSBdP2C_eZ3zbrhFhl1--r_m5aC4
+@staffToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhOGZiM2RhNDg2ZjcyZWM0ZTcyZDZjYyIsImlhdCI6MTc4NzgwMjU4OCwiZXhwIjoxNzkwMzk0NTg4fQ.F8hH9ju7XqYmgd3pcDdcVSoOrf4FrAby4t_mdYwNTt4
 @riderToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhM2IxYmVjOTdkYTE3YTU2YWYyODY3NyIsImlhdCI6MTc4MjI1ODY2OCwiZXhwIjoxNzg0ODUwNjY4fQ.U06qtnfM-n94iCygKG1XwPFaJCGi11aSjNfaYZge2yw
 
 ### =========================================================================
 ### 1. DIAGNOSTIC ROOT ENDPOINT
 ### =========================================================================
 
-GET http://localhost:5000/
+GET https://ohh2sn3qr6.execute-api.eu-west-2.amazonaws.com/
 Accept: application/json
 
 ---
@@ -30,7 +30,7 @@ Content-Type: application/json
 
 {
   "name": "Kwame Mensah",
-  "email": "kwame@stellaskitchen.com",
+  "phoneNumber": "+233550307526",
   "password": "StaffSecurePass123",
   "role": "Staff"
 }
@@ -42,7 +42,7 @@ POST {{baseUrl}}/auth/staff/login
 Content-Type: application/json
 
 {
-  "email": "kwame@stellaskitchen.com",
+  "phoneNumber": "+233550307526",
   "password": "StaffSecurePass123"
 }
 
