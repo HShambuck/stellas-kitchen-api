@@ -20,8 +20,16 @@ app.use(express.json());
 // Database Connection Middleware for Serverless
 // Ensures DB is connected before handling routes without creating redundant connections
 app.use(async (req, res, next) => {
-  await connectDB();
-  next();
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error("Database connection failure:", error);
+    res.status(500).json({ 
+      error: "Database Connection Error", 
+      details: error.message 
+    });
+  }
 });
 
 // Application Routing Matrix
