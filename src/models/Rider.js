@@ -1,21 +1,21 @@
 import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 const riderSchema = new mongoose.Schema({
   name: { type: String, required: true },
   phoneNumber: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: { type: String, default: 'Rider' },
-  vehicleRegistration: { type: String, required: false }, // e.g., Motorbike plate number
+  vehicleRegistration: { type: String, required: false },
   scheduleStatus: { 
     type: String, 
     required: true, 
-    enum: ['Offline', 'Available', 'On Delivery Run'], // 💡 Refactored 'Active/Idle' to 'Available'
+    enum: ['Offline', 'Available', 'On Delivery Run'],
     default: 'Offline' 
   }
 }, { timestamps: true });
 
-// Pre-save middleware to automatically hash passwords before saving (Modern Async style)
+// Pre-save middleware to automatically hash passwords before saving
 riderSchema.pre('save', async function () {
   if (!this.isModified('password')) return;
   
