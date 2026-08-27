@@ -7,11 +7,10 @@ let serverlessExpressInstance;
 
 async function setup() {
   try {
-    // 1. Fetch parameters with a strict 3-second timeout so it doesn't hang
     const command = new GetParametersCommand({
       Names: [
-        process.env.MONGO_URI_PARAM_NAME || "MONGO_URI",
-        process.env.JWT_SECRET_PARAM_NAME || "JWT_SECRET",
+        process.env.MONGO_URI_PARAM_NAME,
+        process.env.JWT_SECRET_PARAM_NAME,
       ],
       WithDecryption: true,
     });
@@ -27,22 +26,15 @@ async function setup() {
       }
     });
   } catch (err) {
-    console.error("SSM Initialization Failed - using local env:", err.message);
+    console.error("SSM Fetch Warning:", err.message);
   }
 
-  // 2. Initialize serverlessExpress with error responses forced ON
-  serverlessExpressInstance = serverlessExpress({ 
-    app,
-    respondWithErrors: true, // Forces full stack trace into the JSON response
-    logSettings: { level: 'debug' }
-  });
+  serverlessExpressInstance = serverlessExpress({ app });
 }
 
-export const handler = async (event, context) => {
-  context.callbackWaitsForEmptyEventLoop = false;
-  
+export const handler = async (event, context, callback) => {
   if (!serverlessExpressInstance) {
     await setup();
   }
-  return serverlessExpressInstance(event, context);
+  return serverlessExpressInstance(event, context, callback);
 };
