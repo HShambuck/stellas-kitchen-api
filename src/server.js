@@ -17,9 +17,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Database Connection Middleware for Serverless
-// Ensures DB is connected before handling routes without creating redundant connections
-app.use(async (req, res, next) => {
+// Root Endpoint - Responds fast without waiting for DB
+app.get("/", (req, res) => {
+  res.status(200).send("Stella's Kitchen API is spinning...");
+});
+
+// Database Connection Middleware - Only runs on /api endpoints
+const dbMiddleware = async (req, res, next) => {
   try {
     await connectDB();
     next();
@@ -30,18 +34,13 @@ app.use(async (req, res, next) => {
       details: error.message 
     });
   }
-});
+};
 
 // Application Routing Matrix
-app.use("/api/auth", authRoutes);
-app.use("/api/orders", orderRoutes);
-app.use("/api/menu", menuRoutes);
-app.use("/api/riders", riderRoutes);
-
-// Root Endpoint
-app.get("/", (req, res) => {
-  res.send("Stella's Kitchen API is spinning...");
-});
+app.use("/api/auth", dbMiddleware, authRoutes);
+app.use("/api/orders", dbMiddleware, orderRoutes);
+app.use("/api/menu", dbMiddleware, menuRoutes);
+app.use("/api/riders", dbMiddleware, riderRoutes);
 
 // ONLY run app.listen when running locally (not in AWS Lambda)
 if (process.env.NODE_ENV !== "production" && !process.env.LAMBDA_TASK_ROOT) {
