@@ -1,0 +1,16 @@
+name: Trigger Infra Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  notify-infra:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch deploy event to infra repo
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.CROSS_REPO_PAT }}
+          repository: HShambuck/stellas-kitchen-infra
+          event-type: api-updated
