@@ -53,6 +53,22 @@ export const createWebLinkOrder = async (req, res) => {
   }
 };
 
+// @desc    Public order status lookup (customer-facing tracking link)
+// @route   GET /api/orders/track/:id
+// @access  Public
+export const trackOrder = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id).select(
+      'customerName statusState items totalAmount channelSource createdAt updatedAt'
+    );
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+    res.status(200).json(order);
+  } catch (error) {
+    // Invalid ObjectId format throws a CastError here
+    res.status(400).json({ message: 'Invalid order ID' });
+  }
+};
+
 // @desc    Create a manual phone/walk-in order via Staff App
 // @route   POST /api/orders/manual
 // @access  Protected (Staff/Manager only)
@@ -127,3 +143,4 @@ export const acceptDelivery = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
